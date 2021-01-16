@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { Button, Image } from 'react-native-elements'
 
 function InfoScreen() {
@@ -22,7 +22,7 @@ function InfoScreen() {
             color: "white"
           }}
           onPress={() => {
-            console.log('https://github.com/geotraceapp')
+            Linking.openURL('https://github.com/geotraceapp')
           }}
         />
       </View>
