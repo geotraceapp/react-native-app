@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react'
 import { View, Text } from 'react-native'
-import { Button, Image } from 'react-native-elements'
+import { Button, Image, Overlay } from 'react-native-elements'
 import CodeScreen from './CodeScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -43,6 +43,7 @@ const Home = ({ navigation }) => {
   const [id, setId] = React.useState('')
   const [token, setToken] = React.useState('')
   const [degree, setDegree] = React.useState(5)
+  const [loading, setLoading] = React.useState(false)
   React.useEffect(() => {
     (async () => {
       let id = await AsyncStorage.getItem('@id')
@@ -106,10 +107,12 @@ const Home = ({ navigation }) => {
           }}
           title={`Report ${degree === 0 ? 'NEGATIVE' : 'POSITIVE'} for COVID-19`}
           onPress={async () => {
+            setLoading(true)
             await fetch(`https://us-central1-geotrace-301902.cloudfunctions.net/report${degree === 0 ? 'NEGATIVE' : 'POSITIVE'}?userId=${id}`)
             const res = await fetch(`https://us-central1-geotrace-301902.cloudfunctions.net/getRiskLevel?userId=${id}`)
             const obj = await res.json()
             setDegree(obj.degree)
+            setLoading(false)
           }}
         />
         {/* <Text />
@@ -118,6 +121,9 @@ const Home = ({ navigation }) => {
         <Text style={{ fontWeight: '300', fontSize: 24 }}>User ID: {id}</Text>
         <Text />
         <Text style={{ fontWeight: '300', fontSize: 24 }}>User Token: {token}</Text> */}
+        <Overlay isVisible={loading}>
+          <Text>Submitting COVID-19 Report...</Text>
+        </Overlay>
       </View>
     </View>
   )

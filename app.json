@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "GeoTrace",
+    "icon": "./assets/square.png",
+    "version": "1.0.0",
+    "slug": "geotrace",
+    "ios": {
+      "bundleIdentifier": "space.geotrace.app",
+      "buildNumber": "1.0.0"
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#ffffff"
+    },
+    "orientation": "portrait",
+    "android": {
+      "package": "space.geotrace.app",
+      "versionCode": 1
+    }
+  }
+}
