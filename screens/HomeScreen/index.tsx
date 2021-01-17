@@ -4,8 +4,28 @@ import * as React from 'react'
 import { View, Text } from 'react-native'
 import { Button, Image } from 'react-native-elements'
 import CodeScreen from './CodeScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Home = ({ navigation }) => {
+  const [id, setId] = React.useState('')
+  const [token, setToken] = React.useState('')
+  React.useEffect(() => {
+    (async () => {
+      let id = await AsyncStorage.getItem('@id')
+      let token = await AsyncStorage.getItem('@token')
+      if (!id || !token) {
+        const res = await fetch('https://us-central1-geotrace-301902.cloudfunctions.net/makeUser')
+        const obj = await res.json()
+        id = obj.id
+        token = obj.token
+        await AsyncStorage.setItem('@id', id)
+        await AsyncStorage.setItem('@token', token)
+      }
+      setId(id)
+      setToken(token)
+    })()
+  }, [])
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <StatusBar style="dark" />
@@ -18,8 +38,6 @@ const Home = ({ navigation }) => {
         <Text style={{ fontWeight: '300', fontSize: 24 }}>Your risk level is: LOW</Text>
         <Text />
         <Text style={{ fontWeight: '300', fontSize: 24 }}>Please continue to stay safe and stay local as much as possible.</Text>
-        <Text />
-        <Text style={{ fontWeight: '300', fontSize: 24 }}>Your contact tracing code is: XXXXXX</Text>
         <Text />
         <Button
           buttonStyle={{
@@ -36,6 +54,12 @@ const Home = ({ navigation }) => {
             navigation.navigate('Code')
           }}
         />
+        <Text />
+        <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Development Stuff:</Text>
+        <Text />
+        <Text style={{ fontWeight: '300', fontSize: 24 }}>User ID: {id}</Text>
+        <Text />
+        <Text style={{ fontWeight: '300', fontSize: 24 }}>User Token: {token}</Text>
       </View>
     </View>
   )
